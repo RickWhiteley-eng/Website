@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleNotes — Private notes for Mac with .enex import</title>
+    <meta name="description" content="A fast, private note manager for macOS. Import Evernote .enex files, search thousands of notes instantly, encrypt sensitive content, and keep everything local.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            color: #2d2d2d;
+            background: #fafafa;
+            line-height: 1.7;
+        }
+
+        a { color: #3a6cf4; text-decoration: none; transition: color 0.2s; }
+        a:hover { color: #1e4fd0; }
+
+        /* --- Hero --- */
+        .hero {
+            background: linear-gradient(180deg, #fff 0%, #f3f5fb 100%);
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero p.tagline {
+            font-size: 1.3rem;
+            color: #555;
+            max-width: 620px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero .pitch {
+            font-size: 1.05rem;
+            color: #666;
+            max-width: 620px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.85rem 2.2rem;
+            background: #3a6cf4;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .cta:hover {
+            background: #1e4fd0;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .cta.secondary {
+            background: #fff;
+            color: #3a6cf4;
+            border: 1px solid #c8d4f5;
+            margin-left: 0.6rem;
+        }
+
+        .cta.secondary:hover {
+            background: #f0f4ff;
+        }
+
+        .availability {
+            margin-top: 1.5rem;
+            font-size: 0.92rem;
+            color: #888;
+        }
+
+        /* --- Nav --- */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem 2rem;
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        nav a:hover { color: #3a6cf4; }
+
+        /* --- Sections --- */
+        section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.4px;
+        }
+
+        /* --- Feature grid --- */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 1.6rem;
+            transition: box-shadow 0.2s, transform 0.1s;
+        }
+
+        .feature:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .feature h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d2d2d;
+        }
+
+        .feature p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* --- Privacy callout --- */
+        .privacy-callout {
+            background: #f0f6ec;
+            border: 1px solid #d6e7c8;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .privacy-callout h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            color: #345621;
+        }
+
+        .privacy-callout p {
+            color: #4a5f3a;
+            margin-bottom: 0.8rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            font-size: 0.9rem;
+            color: #999;
+            border-top: 1px solid #e8e8e8;
+            background: #fff;
+        }
+
+        footer a { margin: 0 0.6rem; }
+
+        /* --- Responsive --- */
+        @media (max-width: 600px) {
+            .hero { padding: 3.5rem 1.5rem 3rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p.tagline { font-size: 1.1rem; }
+            section { padding: 3rem 1.5rem; }
+            section h2 { font-size: 1.5rem; }
+            nav { gap: 1.2rem; }
+            .cta.secondary { margin-left: 0; margin-top: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>SimpleNotes</h1>
+        <p class="tagline">Private notes for Mac, with native <code>.enex</code> import.</p>
+        <p class="pitch">
+            A fast, local-first note manager. Open any folder of Evernote
+            <code>.enex</code> files and search thousands of notes instantly. Your data
+            stays on your Mac.
+        </p>
+        <a href="#availability" class="cta">Get SimpleNotes</a>
+        <a href="#features" class="cta secondary">See features</a>
+        <p class="availability">Available on the Mac App Store</p>
+    </div>
+
+    <nav>
+        <a href="./simplenotes.html">SimpleNotes</a>
+        <a href="#features">Features</a>
+        <a href="./simplenotes-support.html">Support</a>
+        <a href="./simplenotes-privacy.html">Privacy</a>
+        <a href="./index.html">Developer</a>
+    </nav>
+
+    <section id="features">
+        <h2>What it does</h2>
+        <div class="features">
+
+            <div class="feature">
+                <h3>Native .enex support</h3>
+                <p>
+                    Open and save Evernote-format files directly. No conversion step,
+                    no proprietary database, no migration cost if you decide to leave.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Full-text search</h3>
+                <p>
+                    Find any note in milliseconds across thousands. Supports AND, OR,
+                    NOT, exact phrases, prefix matching, and a fuzzy mode for typos.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Rich text editor</h3>
+                <p>
+                    Bold, italic, underline, strikethrough, font sizes, colors,
+                    highlights, bullets, numbered lists, checklists, and tables.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>AES encryption</h3>
+                <p>
+                    Protect sensitive sections with an optional password. Encrypted
+                    text is sealed inside the <code>.enex</code> file and only decrypted
+                    when you provide the password.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>PDF export</h3>
+                <p>
+                    Export any note to PDF with formatting, colors, embedded images,
+                    and tables preserved.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Attachments</h3>
+                <p>
+                    Attach images, PDFs, and other files to your notes. Images embed
+                    inline in the note view.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Tags &amp; NoteFolders</h3>
+                <p>
+                    Organize how you like. Filter by tag, by NoteFolder, by date
+                    range, or by whether a note has attachments.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Optional Drive sharing</h3>
+                <p>
+                    Share a NoteFolder with another user via your own Google Drive
+                    account. Only the folders you select are uploaded — everything
+                    else stays local.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="privacy-callout">
+            <h3>Your notes don't leave your Mac.</h3>
+            <p>
+                No account. No analytics. No telemetry. No advertising identifiers.
+                The optional Google Drive sharing uploads only the folders you
+                explicitly choose, to your own Drive — the developer never sees them.
+            </p>
+            <p>
+                <a href="./simplenotes-privacy.html">Read the full privacy policy →</a>
+            </p>
+        </div>
+    </section>
+
+    <section id="availability">
+        <h2>Get SimpleNotes</h2>
+        <div class="privacy-callout" style="background: #f3f5fb; border-color: #d8def0;">
+            <h3 style="color: #2d3a5e;">Coming to the Mac App Store</h3>
+            <p style="color: #4a5266;">
+                SimpleNotes is in submission. Once it's live, the App Store link
+                will appear here. In the meantime, you can read the
+                <a href="./simplenotes-support.html">Support page</a> for FAQs and
+                contact details.
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <a href="./index.html">Rick Whiteley</a> ·
+        <a href="./simplenotes-support.html">Support</a> ·
+        <a href="./simplenotes-privacy.html">Privacy</a> ·
+        <a href="mailto:rick.whiteley@gmail.com">Contact</a>
+        <br><br>
+        &copy; 2026 Richard Whiteley. All rights reserved.
+    </footer>
+
+</body>
+</html>
