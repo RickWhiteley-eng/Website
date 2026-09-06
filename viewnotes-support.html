@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<title>ViewNotes Support</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #F1F4F9;
+    --paper: #FFFFFF;
+    --paper-2: #F8FAFD;
+    --ink: #19212E;
+    --ink-soft: #47536633;
+    --prose: #3B4757;
+    --muted: #6B7688;
+    --line: #E2E7F0;
+    --line-strong: #CED6E3;
+    --accent: #2C5F8A;
+    --accent-ink: #234E73;
+    --accent-soft: #E9F1F9;
+    --lock-closed: #3B6FA0;
+    --lock-open: #2C8467;
+    --lock-open-soft: #E4F2EC;
+    --shadow: 0 1px 2px rgba(20,35,60,.04), 0 8px 28px -18px rgba(20,35,60,.28);
+    --radius: 14px;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --ground: #0D121B;
+      --paper: #151D29;
+      --paper-2: #1A2431;
+      --ink: #E8EDF4;
+      --prose: #B7C1CF;
+      --muted: #7E8899;
+      --line: #26313F;
+      --line-strong: #33404F;
+      --accent: #74ABDA;
+      --accent-ink: #9AC5E8;
+      --accent-soft: #172636;
+      --lock-closed: #74ABDA;
+      --lock-open: #58C39C;
+      --lock-open-soft: #14261F;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0D121B;
+    --paper: #151D29;
+    --paper-2: #1A2431;
+    --ink: #E8EDF4;
+    --prose: #B7C1CF;
+    --muted: #7E8899;
+    --line: #26313F;
+    --line-strong: #33404F;
+    --accent: #74ABDA;
+    --accent-ink: #9AC5E8;
+    --accent-soft: #172636;
+    --lock-closed: #74ABDA;
+    --lock-open: #58C39C;
+    --lock-open-soft: #14261F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--prose);
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.62;
+    font-optical-sizing: auto;
+  }
+  .wrap {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1.1rem, 4vw, 1.75rem) 4rem;
+  }
+
+  /* ---- typography roles ---- */
+  h1, h2, h3, .eyebrow, .lead, nav, .meta, .chip, .card-label, .contact-cta, footer, .backtop {
+    font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  }
+  .eyebrow {
+    font-size: .74rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 .7rem;
+  }
+  h1 {
+    font-size: clamp(1.9rem, 5.5vw, 2.55rem);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    margin: 0 0 .6rem;
+    text-wrap: balance;
+  }
+  .lead {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 1.16rem;
+    color: var(--prose);
+    margin: 0 0 1.1rem;
+    max-width: 40rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem .9rem;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .meta li { display: flex; align-items: center; gap: .5rem; }
+  .meta li + li::before {
+    content: "";
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--line-strong);
+    margin-right: .9rem;
+    margin-left: -.4rem;
+  }
+
+  /* ---- header ---- */
+  header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(1rem, 4vw, 1.6rem);
+    align-items: start;
+    padding-bottom: 1.9rem;
+    margin-bottom: 1.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .mark {
+    width: 58px; height: 58px;
+    border-radius: 15px;
+    background:
+      radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 18%, var(--paper)) 0%, var(--paper) 60%);
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
+    display: grid; place-items: center;
+    flex: none;
+  }
+  .mark svg { width: 30px; height: 30px; display: block; }
+
+  /* ---- jump nav ---- */
+  nav.toc {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.05rem 1.15rem;
+    margin-bottom: 2.4rem;
+    box-shadow: var(--shadow);
+  }
+  nav.toc .card-label {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .75rem;
+  }
+  nav.toc ol {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: .15rem .5rem;
+    counter-reset: toc;
+  }
+  nav.toc a {
+    counter-increment: toc;
+    display: flex;
+    align-items: baseline;
+    gap: .7rem;
+    padding: .5rem .55rem;
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: .95rem;
+    font-weight: 500;
+    transition: background .15s ease, color .15s ease;
+  }
+  nav.toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: "Spline Sans Mono", monospace;
+    font-size: .74rem;
+    font-weight: 500;
+    color: var(--accent);
+    flex: none;
+  }
+  nav.toc a:hover { background: var(--accent-soft); color: var(--accent-ink); }
+
+  /* ---- sections ---- */
+  section { margin-bottom: 2.6rem; scroll-margin-top: 1.2rem; }
+  h2 {
+    font-size: 1.34rem;
+    font-weight: 700;
+    letter-spacing: -.006em;
+    color: var(--ink);
+    margin: 0 0 .35rem;
+    display: flex;
+    align-items: baseline;
+    gap: .7rem;
+    text-wrap: balance;
+  }
+  h2 .num {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: .98rem;
+    margin: 0 0 1.3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .qa { margin: 0 0 1.5rem; }
+  .qa:last-child { margin-bottom: 0; }
+  h3 {
+    font-size: 1.04rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 .4rem;
+    line-height: 1.35;
+  }
+  .qa p { margin: 0 0 .7rem; }
+  .qa p:last-child { margin-bottom: 0; }
+  .qa ul { margin: .5rem 0 .7rem; padding-left: 1.15rem; }
+  .qa li { margin: .3rem 0; }
+  a.link { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+
+  code, .mono {
+    font-family: "Spline Sans Mono", ui-monospace, monospace;
+    font-size: .86em;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: .08em .4em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* lock-state chips — the app's real vocabulary */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .78rem;
+    font-weight: 600;
+    padding: .12rem .55rem .12rem .4rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    vertical-align: baseline;
+  }
+  .chip svg { width: 13px; height: 13px; }
+  .chip.closed { color: var(--lock-closed); background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--lock-closed) 30%, transparent); }
+  .chip.open { color: var(--lock-open); background: var(--lock-open-soft); border: 1px solid color-mix(in srgb, var(--lock-open) 32%, transparent); }
+
+  /* callout for the important "we can't recover it" note */
+  .note {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: .95rem 1.1rem;
+    margin: .9rem 0;
+    font-size: .97rem;
+  }
+  .note strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- contact ---- */
+  .contact {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: clamp(1.3rem, 4vw, 1.8rem);
+  }
+  .contact h2 { margin-bottom: .5rem; }
+  .contact .rows { margin-top: 1.2rem; display: grid; gap: .1rem; }
+  .contact .row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 1rem;
+    padding: .7rem 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .contact .row .k {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: .74rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .contact .row .v { font-size: 1rem; color: var(--prose); }
+  .contact .row .v .mono { font-size: .9rem; }
+  .placeholder {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: .82rem;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 6px;
+    padding: .1em .45em;
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: .6rem 1.2rem;
+    font-size: .82rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+  footer a:hover { color: var(--accent-ink); }
+
+  a:focus-visible, nav.toc a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+  }
+  html { scroll-behavior: smooth; }
+  @media (max-width: 34rem) {
+    body { font-size: 17px; }
+    .contact .row { grid-template-columns: 1fr; gap: .15rem; }
+    header { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4" stroke="var(--accent)" stroke-width="1.7"/>
+        <path d="M7.5 10.5V7.5a4.5 4.5 0 0 1 9 0v3" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round"/>
+        <circle cx="12" cy="15" r="1.5" fill="var(--accent)"/>
+        <path d="M12 16.2v2.1" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <p class="eyebrow">ViewNotes Support</p>
+      <h1>Help with ViewNotes</h1>
+      <p class="lead">ViewNotes opens the encrypted notes SimpleNotes backs up to your Google&nbsp;Drive, and decrypts them right on your iPhone. Here&rsquo;s how to get set up and answers to the questions that come up most.</p>
+      <ul class="meta">
+        <li>iPhone</li>
+        <li>iOS&nbsp;17.6 or later</li>
+        <li>Version&nbsp;1.0</li>
+      </ul>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Jump to a topic">
+    <p class="card-label">Jump to a topic</p>
+    <ol>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#unlock">Unlocking &amp; your password</a></li>
+      <li><a href="#read">Reading, search &amp; offline</a></li>
+      <li><a href="#temp">Sending a Temp Note</a></li>
+      <li><a href="#privacy">Privacy &amp; security</a></li>
+      <li><a href="#trouble">Troubleshooting</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </nav>
+
+  <section id="start">
+    <h2><span class="num">01</span> Getting started</h2>
+    <p class="section-sub">ViewNotes is the read side of SimpleNotes on your phone. It needs SimpleNotes on your Mac, already backing up to Google&nbsp;Drive.</p>
+
+    <div class="qa">
+      <h3>Do I need SimpleNotes on a Mac to use ViewNotes?</h3>
+      <p>Yes. ViewNotes is a companion viewer &mdash; it opens the encrypted backups that <strong style="color:var(--ink);font-weight:600">SimpleNotes</strong> writes to your Google&nbsp;Drive. On a brand-new account with no backups yet, there&rsquo;s nothing for it to show. Set up SimpleNotes to back up to Drive first, then sign in here with the same Google account.</p>
+    </div>
+
+    <div class="qa">
+      <h3>How do I sign in?</h3>
+      <p>Tap <strong style="color:var(--ink);font-weight:600">Sign In with Google</strong> on the first screen and choose the account that holds your backups. ViewNotes asks Google for only the narrow <code>drive.file</code> permission &mdash; it can never see the rest of your Drive, just the one folder you hand it next.</p>
+    </div>
+
+    <div class="qa">
+      <h3>How do I choose my Backups folder?</h3>
+      <p>After signing in you&rsquo;ll see <strong style="color:var(--ink);font-weight:600">One more step</strong>. Tap <strong style="color:var(--ink);font-weight:600">Choose Backups Folder</strong>, then use Google&rsquo;s own picker to select the folder SimpleNotes writes to (usually named <em>SimpleNotes&nbsp;Backups</em>). That grant covers everything inside that folder, so ViewNotes can list each backup it finds. Picked the wrong one? Change it any time from the <span class="mono">•••</span> menu &rarr; <strong style="color:var(--ink);font-weight:600">Change Folder</strong>.</p>
+    </div>
+
+    <div class="qa">
+      <h3>What do the lock icons mean?</h3>
+      <p>Each backup in the list shows its state:</p>
+      <ul>
+        <li><span class="chip closed"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Locked</span> &mdash; not yet unlocked this session. Tap it and enter your master password to open it.</li>
+        <li><span class="chip open"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 7-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Unlocked</span> &mdash; decrypted and ready to read. Swipe left &rarr; <strong style="color:var(--ink);font-weight:600">Lock</strong> to re-lock it and clear its decrypted contents from memory.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="unlock">
+    <h2><span class="num">02</span> Unlocking &amp; your master password</h2>
+    <p class="section-sub">Your notes are decrypted on your iPhone using the master password you chose in SimpleNotes. That password is never uploaded &mdash; which is also why it can&rsquo;t be recovered here.</p>
+
+    <div class="qa">
+      <h3>How do I unlock a backup?</h3>
+      <p>Tap a locked backup and enter your <strong style="color:var(--ink);font-weight:600">master password</strong> &mdash; the same one you set in SimpleNotes on your Mac. ViewNotes decrypts the backup on your device and opens it for reading.</p>
+    </div>
+
+    <div class="qa">
+      <h3>I forgot my master password.</h3>
+      <div class="note">
+        <p><strong>ViewNotes can&rsquo;t recover or reset it.</strong> Your master password is never stored on your device or uploaded anywhere, so there&rsquo;s nothing for ViewNotes to look up. Your password lives with SimpleNotes on your Mac &mdash; recover or change it there. If you change it in SimpleNotes, use the new password the next time you unlock in ViewNotes.</p>
+      </div>
+    </div>
+
+    <div class="qa">
+      <h3>A note has a locked block inside it. How do I read it?</h3>
+      <p>Individual <strong style="color:var(--ink);font-weight:600">encrypted blocks</strong> inside a note have their own password. Tap the block and enter that block password to decrypt just that section &mdash; on your device, like everything else.</p>
+    </div>
+
+    <div class="qa">
+      <h3>What do &ldquo;Remember master password&rdquo; and &ldquo;Forget master password&rdquo; do?</h3>
+      <p><strong style="color:var(--ink);font-weight:600">Remember</strong> (in Settings) caches your folder&rsquo;s data key in the iPhone Keychain so background sync can keep offline copies current without re-prompting. Turn it off and that cached key is wiped &mdash; background sync then can&rsquo;t run until you unlock again.</p>
+      <p><strong style="color:var(--ink);font-weight:600">Forget master password</strong> wipes every cached key <em>and</em> the decrypted on-device copies of your notes, returning ViewNotes to a fully locked state.</p>
+    </div>
+  </section>
+
+  <section id="read">
+    <h2><span class="num">03</span> Reading, search &amp; offline</h2>
+    <p class="section-sub">Read your notes with their original formatting, search across everything you&rsquo;ve opened, and keep folders available without a connection.</p>
+
+    <div class="qa">
+      <h3>How does search work?</h3>
+      <p>The magnifying glass (top-left of the backup list) searches <strong style="color:var(--ink);font-weight:600">across every backup you&rsquo;ve opened</strong> &mdash; both note titles and body text. A backup you&rsquo;ve never unlocked isn&rsquo;t in the index yet; open it once and it becomes searchable.</p>
+    </div>
+
+    <div class="qa">
+      <h3>Can I read my notes offline?</h3>
+      <p>Yes. Turn on <strong style="color:var(--ink);font-weight:600">Keep notes offline</strong> and ViewNotes downloads a folder&rsquo;s notes so you can read and search them without a connection. When the list is being served from saved copies, a yellow <em>&ldquo;Offline &mdash; showing saved copies&rdquo;</em> banner appears at the top.</p>
+    </div>
+
+    <div class="qa">
+      <h3>Will my notes show up in the iPhone&rsquo;s Spotlight search?</h3>
+      <p>Only if you choose to. Notes are kept <strong style="color:var(--ink);font-weight:600">out</strong> of the system search index by default. You can opt in from Settings if you want notes to appear in Spotlight &mdash; the setting explains the trade-off before you turn it on.</p>
+    </div>
+  </section>
+
+  <section id="temp">
+    <h2><span class="num">04</span> Sending a Temp Note</h2>
+    <p class="section-sub">ViewNotes is a viewer &mdash; it never changes your real notes. The one thing it writes is a Temp Note you deliberately compose and send to your Mac.</p>
+
+    <div class="qa">
+      <h3>What is a Temp Note?</h3>
+      <p>Tap the compose icon (the pencil-in-square, top-right) to write a quick note on your phone and send it up to Drive. SimpleNotes on your Mac imports it later. It&rsquo;s a one-way path from phone to Mac &mdash; it doesn&rsquo;t edit or overwrite any existing note.</p>
+    </div>
+
+    <div class="qa">
+      <h3>Can I dictate instead of typing?</h3>
+      <p>Yes. The Temp Note editor supports dictation, and transcription happens <strong style="color:var(--ink);font-weight:600">entirely on your iPhone</strong> &mdash; the audio and the transcript never leave the device. You can also attach photos to a Temp Note.</p>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <h2><span class="num">05</span> Privacy &amp; security</h2>
+    <p class="section-sub">ViewNotes has no servers of its own. It collects nothing, and it never sees your master password.</p>
+
+    <div class="qa">
+      <h3>Can you (the developer) see my notes?</h3>
+      <p>No. There is no ViewNotes backend. Your encrypted backups live in <em>your</em> Google&nbsp;Drive, and they&rsquo;re decrypted only on your iPhone with your master password. We collect no data and there is no analytics or advertising in the app.</p>
+    </div>
+
+    <div class="qa">
+      <h3>Why does ViewNotes use Google sign-in?</h3>
+      <p>Because that&rsquo;s where your backups are &mdash; SimpleNotes stores them in your Google&nbsp;Drive. ViewNotes signs in to read them, requesting only the <code>drive.file</code> scope, which limits it to the single folder you select. Google (and anyone else looking at your Drive) sees only encrypted bytes.</p>
+    </div>
+
+    <div class="qa">
+      <h3>Is my master password ever uploaded?</h3>
+      <p>Never. It isn&rsquo;t transmitted and isn&rsquo;t stored off your device. All decryption is done locally on your iPhone.</p>
+    </div>
+  </section>
+
+  <section id="trouble">
+    <h2><span class="num">06</span> Troubleshooting</h2>
+    <p class="section-sub">The quick fixes for the issues people hit most.</p>
+
+    <div class="qa">
+      <h3>Sign-in fails, or ViewNotes can&rsquo;t reach Drive</h3>
+      <ul>
+        <li>Check your internet connection, then try <strong style="color:var(--ink);font-weight:600">Sign In with Google</strong> again.</li>
+        <li>Make sure you&rsquo;re choosing the Google account that actually holds your SimpleNotes backups.</li>
+        <li>If sign-in was interrupted, open the <span class="mono">•••</span> menu &rarr; <strong style="color:var(--ink);font-weight:600">Sign Out</strong>, then sign in again cleanly.</li>
+      </ul>
+    </div>
+
+    <div class="qa">
+      <h3>The backup list is empty, or shows the wrong folders</h3>
+      <p>You may have selected the wrong Drive folder during setup. Open the <span class="mono">•••</span> menu &rarr; <strong style="color:var(--ink);font-weight:600">Change Folder</strong> and pick the folder SimpleNotes backs up to (usually <em>SimpleNotes&nbsp;Backups</em>). Pull down on the list to refresh from Drive.</p>
+    </div>
+
+    <div class="qa">
+      <h3>My master password isn&rsquo;t accepted</h3>
+      <p>Use the exact master password you set in SimpleNotes &mdash; it&rsquo;s case-sensitive. If you changed it in SimpleNotes recently, use the new one. ViewNotes can&rsquo;t reset it (see <a class="link" href="#unlock">Unlocking &amp; your password</a>).</p>
+    </div>
+
+    <div class="qa">
+      <h3>Search isn&rsquo;t finding a note I know exists</h3>
+      <p>Search covers backups you&rsquo;ve <strong style="color:var(--ink);font-weight:600">already opened</strong>. Unlock the backup that contains the note once, and it&rsquo;ll be included from then on.</p>
+    </div>
+
+    <div class="qa">
+      <h3>I want to fully remove my data from this iPhone</h3>
+      <p>Settings &rarr; <strong style="color:var(--ink);font-weight:600">Forget master password</strong> wipes the cached keys and the decrypted on-device copies. Signing out and deleting the app removes everything ViewNotes stored locally. Your backups in Google&nbsp;Drive are untouched &mdash; ViewNotes never deletes them.</p>
+    </div>
+  </section>
+
+  <section id="contact" aria-label="Contact us">
+    <div class="contact">
+      <h2><span class="num">07</span> Contact us</h2>
+      <p>Still stuck, or found a bug? Send us a note and we&rsquo;ll help. Including the details below gets you a faster, better answer.</p>
+      <div class="rows">
+        <div class="row">
+          <span class="k">Email</span>
+          <span class="v"><a class="link" href="mailto:rick.whiteley@gmail.com?subject=ViewNotes%20support">rick.whiteley@gmail.com</a></span>
+        </div>
+        <div class="row">
+          <span class="k">Please include</span>
+          <span class="v">Your ViewNotes version (Settings shows it), your iPhone&rsquo;s iOS version, and a short description of what you did and what happened.</span>
+        </div>
+        <div class="row">
+          <span class="k">Please don&rsquo;t send</span>
+          <span class="v">Your master password or any decrypted note content &mdash; we never need it, and we can&rsquo;t read your notes anyway.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>ViewNotes &middot; Version&nbsp;1.0 &middot; iPhone, iOS&nbsp;17.6+</span>
+    <span><a href="#privacy">Privacy</a> &middot; <a href="https://rickwhiteley-eng.github.io/Website/viewnotes-privacy.html">Privacy Policy</a></span>
+  </footer>
+
+</div>
+
+</html>

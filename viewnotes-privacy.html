@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<title>ViewNotes Privacy Policy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Spline+Sans+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #F1F4F9;
+    --paper: #FFFFFF;
+    --paper-2: #F8FAFD;
+    --ink: #19212E;
+    --prose: #3B4757;
+    --muted: #6B7688;
+    --line: #E2E7F0;
+    --line-strong: #CED6E3;
+    --accent: #2C5F8A;
+    --accent-ink: #234E73;
+    --accent-soft: #E9F1F9;
+    --shadow: 0 1px 2px rgba(20,35,60,.04), 0 8px 28px -18px rgba(20,35,60,.28);
+    --radius: 14px;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --ground: #0D121B;
+      --paper: #151D29;
+      --paper-2: #1A2431;
+      --ink: #E8EDF4;
+      --prose: #B7C1CF;
+      --muted: #7E8899;
+      --line: #26313F;
+      --line-strong: #33404F;
+      --accent: #74ABDA;
+      --accent-ink: #9AC5E8;
+      --accent-soft: #172636;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0D121B;
+    --paper: #151D29;
+    --paper-2: #1A2431;
+    --ink: #E8EDF4;
+    --prose: #B7C1CF;
+    --muted: #7E8899;
+    --line: #26313F;
+    --line-strong: #33404F;
+    --accent: #74ABDA;
+    --accent-ink: #9AC5E8;
+    --accent-soft: #172636;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 34px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--prose);
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.66;
+    font-optical-sizing: auto;
+  }
+  .wrap {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1.1rem, 4vw, 1.75rem) 4rem;
+  }
+  h1, h2, .eyebrow, .lead, .meta, footer, .toc-label {
+    font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  }
+
+  header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(1rem, 4vw, 1.6rem);
+    align-items: start;
+    padding-bottom: 1.9rem;
+    margin-bottom: 1.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .mark {
+    width: 58px; height: 58px;
+    border-radius: 15px;
+    background: radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 18%, var(--paper)) 0%, var(--paper) 60%);
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
+    display: grid; place-items: center;
+    flex: none;
+  }
+  .mark svg { width: 30px; height: 30px; display: block; }
+  .eyebrow {
+    font-size: .74rem; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 .7rem;
+  }
+  h1 {
+    font-size: clamp(1.9rem, 5.5vw, 2.5rem);
+    line-height: 1.08; font-weight: 700; letter-spacing: -.01em;
+    color: var(--ink); margin: 0 0 .6rem; text-wrap: balance;
+  }
+  .lead {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 1.14rem; color: var(--prose); margin: 0 0 1rem; max-width: 40rem;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: .4rem .9rem;
+    font-size: .82rem; font-weight: 500; color: var(--muted);
+    margin: 0; padding: 0; list-style: none;
+  }
+  .meta li + li::before {
+    content: "•"; color: var(--line-strong); margin-right: .9rem; margin-left: -.4rem;
+  }
+
+  .summary {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 2.4rem;
+    box-shadow: var(--shadow);
+    font-size: 1.02rem;
+  }
+  .summary strong { color: var(--ink); font-weight: 600; }
+
+  section { margin-bottom: 2.1rem; scroll-margin-top: 1.2rem; }
+  h2 {
+    font-size: 1.22rem; font-weight: 700; letter-spacing: -.005em;
+    color: var(--ink); margin: 0 0 .5rem;
+    display: flex; align-items: baseline; gap: .7rem; text-wrap: balance;
+  }
+  h2 .num {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: .78rem; font-weight: 500; color: var(--accent);
+  }
+  section p { margin: 0 0 .7rem; }
+  section p:last-child { margin-bottom: 0; }
+  section ul { margin: .4rem 0 .7rem; padding-left: 1.15rem; }
+  section li { margin: .32rem 0; }
+  strong { color: var(--ink); font-weight: 600; }
+  code {
+    font-family: "Spline Sans Mono", ui-monospace, monospace;
+    font-size: .84em; background: var(--paper-2);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: .08em .4em; color: var(--ink); white-space: nowrap;
+  }
+  a.link { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
+
+  footer {
+    margin-top: 3rem; padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; justify-content: space-between;
+    gap: .6rem 1.2rem; font-size: .82rem; color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+  footer a:hover { color: var(--accent-ink); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (max-width: 34rem) { body { font-size: 17px; } header { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4" stroke="var(--accent)" stroke-width="1.7"/>
+        <path d="M7.5 10.5V7.5a4.5 4.5 0 0 1 9 0v3" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round"/>
+        <circle cx="12" cy="15" r="1.5" fill="var(--accent)"/>
+        <path d="M12 16.2v2.1" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <p class="eyebrow">ViewNotes</p>
+      <h1>Privacy Policy</h1>
+      <p class="lead">ViewNotes opens the encrypted note backups created by SimpleNotes and stored in your own Google&nbsp;Drive. This policy explains what the app does &mdash; and does not do &mdash; with your information.</p>
+      <ul class="meta">
+        <li>Last updated: August&nbsp;31,&nbsp;2026</li>
+        <li>iPhone app</li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="summary">
+    <strong>In short:</strong> ViewNotes has no servers of its own. It collects nothing, sends nothing to us, and never sees your master password. Your notes are decrypted only on your iPhone.
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> No data collection</h2>
+    <p>ViewNotes has no backend infrastructure. We do not collect, store, receive, or transmit your personal information, your notes, or your usage to us or to any third party we control. There is no analytics SDK and no advertising in the app.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> On-device decryption</h2>
+    <p>Your notes are encrypted. ViewNotes downloads the encrypted backups from your Google&nbsp;Drive and decrypts them locally on your iPhone, using the master password you set in SimpleNotes. Your <strong>master password is never uploaded, transmitted, or stored anywhere off your device.</strong> Because we never receive it, we cannot recover or reset it &mdash; that is managed in SimpleNotes on your Mac.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> Google account access</h2>
+    <p>When you sign in with Google, ViewNotes requests only the <code>drive.file</code> permission. This limits it to the single Drive folder you select &mdash; not the rest of your Drive. ViewNotes reads your encrypted backups from that folder and, when you choose to send a Temp Note, writes that one file back to it.</p>
+    <p>All access is to your own Google account. Your interaction with Google is governed by <a class="link" href="https://policies.google.com/privacy">Google&rsquo;s Privacy Policy</a>. ViewNotes uses the Google Sign-In SDK to perform authentication; any data that SDK processes is handled per Google&rsquo;s disclosures and is not sent to us.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> Microphone and speech</h2>
+    <p>If you dictate a Temp Note, transcription is performed <strong>on-device</strong>. Audio and transcripts are not sent to us or to any third-party recognition service.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span> On-device storage</h2>
+    <p>Decrypted notes may be cached on your device to enable offline reading and search. This cache is protected by iOS file protection and is removed when you sign out or choose <strong>Forget master password</strong>. Notes are kept out of the system (Spotlight) search index unless you explicitly enable that option in Settings.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">06</span> Children</h2>
+    <p>ViewNotes is not directed at children and collects no data from anyone.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">07</span> Changes</h2>
+    <p>If this policy changes, the updated version will be posted at this URL with a new &ldquo;Last updated&rdquo; date.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">08</span> Contact</h2>
+    <p>Questions about this policy: <a class="link" href="mailto:rick.whiteley@gmail.com?subject=ViewNotes%20privacy">rick.whiteley@gmail.com</a></p>
+  </section>
+
+  <footer>
+    <span>ViewNotes &middot; iPhone, iOS&nbsp;17.6+</span>
+    <span><a href="https://rickwhiteley-eng.github.io/Website/viewnotes-support.html">Support</a></span>
+  </footer>
+
+</div>
+
+</html>
